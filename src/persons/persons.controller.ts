@@ -14,13 +14,27 @@ import { Auth } from '../auth/decorators/auth.decorator';
 import { Role } from '../common/enums/role.enum';
 import { ActiveUser } from '../common/decorators/active-user.decorator';
 import { ActiveUserInterface } from '../common/interfaces/active-user.interface';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
 @Controller('persons')
+@ApiTags('persons')
+@ApiBearerAuth()
+@ApiUnauthorizedResponse({
+  description: 'Unauthorized Bearer Auth',
+})
 @Auth(Role.USER)
 export class PersonsController {
   constructor(private readonly personsService: PersonsService) {}
 
   @Post()
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({
+    description: 'Unauthorized Bearer Auth',
+  })
   create(
     @Body() createPersonDto: CreatePersonDto,
     @ActiveUser() user: ActiveUserInterface,
